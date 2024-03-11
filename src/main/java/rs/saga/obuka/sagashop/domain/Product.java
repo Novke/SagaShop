@@ -35,7 +35,7 @@ public class Product extends BaseEntity<Long>{
     private String description;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<CategoryProduct> categoryProduct;
+    private List<CategoryProduct> categoryProducts;
 
 
 

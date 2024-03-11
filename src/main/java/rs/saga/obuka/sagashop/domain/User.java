@@ -36,9 +36,9 @@ public class User extends BaseEntity<Long>{
     private String surname;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<PayPalAccount> payPalAccount;
+    private List<PayPalAccount> payPalAccounts;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ShoppingCart> shoppingCart;
+    private List<ShoppingCart> shoppingCarts;
 
 }
