@@ -8,6 +8,7 @@ import rs.saga.obuka.sagashop.domain.PayPalAccount;
 import rs.saga.obuka.sagashop.dto.paypal.CreatePayPalAccountCmd;
 import rs.saga.obuka.sagashop.dto.paypal.PayPalAccountInfo;
 import rs.saga.obuka.sagashop.dto.paypal.PayPalAccountResult;
+import rs.saga.obuka.sagashop.dto.paypal.UpdatePayPalAccountCmd;
 
 import java.util.List;
 
@@ -23,6 +24,6 @@ public interface PayPalAccountMapper {
 
     PayPalAccountInfo payPalAccountToPayPalAccountInfo(PayPalAccount payPalAccount);
 
-    void updatePayPalAccountInfoToPayPalAccount(@MappingTarget PayPalAccount payPalAccount, PayPalAccountInfo payPalAccountInfo);
+    void updatePayPalAccountInfoToPayPalAccount(@MappingTarget PayPalAccount payPalAccount, UpdatePayPalAccountCmd payPalAccountInfo);
 
 }

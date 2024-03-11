@@ -7,6 +7,7 @@ import rs.saga.obuka.sagashop.domain.Product;
 import rs.saga.obuka.sagashop.dto.product.CreateProductCmd;
 import rs.saga.obuka.sagashop.dto.product.ProductInfo;
 import rs.saga.obuka.sagashop.dto.product.ProductResult;
+import rs.saga.obuka.sagashop.dto.product.UpdateProductCmd;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public interface ProductMapper {
 
     ProductInfo productToProductInfo(Product product);
 
-    void updateProductInfoToProduct(@MappingTarget Product product, ProductInfo productInfo);
+    void updateProductInfoToProduct(@MappingTarget Product product, UpdateProductCmd cmd);
 
 }

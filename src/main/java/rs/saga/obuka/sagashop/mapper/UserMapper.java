@@ -6,6 +6,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import rs.saga.obuka.sagashop.domain.User;
 import rs.saga.obuka.sagashop.dto.user.CreateUserCmd;
+import rs.saga.obuka.sagashop.dto.user.UpdateUserCmd;
 import rs.saga.obuka.sagashop.dto.user.UserInfo;
 import rs.saga.obuka.sagashop.dto.user.UserResult;
 
@@ -23,6 +24,6 @@ public interface UserMapper {
 
     UserInfo userToUserInfo(User user);
 
-    void updateUserInfoToUser(@MappingTarget User user, UserInfo userInfo);
+    void updateUserCmdToUser(@MappingTarget User user, UpdateUserCmd cmd);
 
 }
