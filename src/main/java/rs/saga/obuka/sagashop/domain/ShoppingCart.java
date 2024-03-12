@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class ShoppingCart extends BaseEntity<Long>{
 
 //    @Column(nullable = false)

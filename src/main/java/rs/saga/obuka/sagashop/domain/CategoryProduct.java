@@ -11,6 +11,6 @@ import javax.persistence.Entity;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class CategoryProduct extends BaseEntity<Long>{
 }
