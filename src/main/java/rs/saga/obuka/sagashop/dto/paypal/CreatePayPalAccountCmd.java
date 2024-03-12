@@ -3,7 +3,6 @@ package rs.saga.obuka.sagashop.dto.paypal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import rs.saga.obuka.sagashop.domain.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,5 +20,5 @@ public class CreatePayPalAccountCmd {
     private String country;
     private String postalCode;
     private String street;
-    private User user;
+    private Long userId;
 }
