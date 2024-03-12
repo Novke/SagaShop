@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.saga.obuka.sagashop.dao.PayPalAccountDAO;
+import rs.saga.obuka.sagashop.dao.UserDAO;
 import rs.saga.obuka.sagashop.domain.PayPalAccount;
+import rs.saga.obuka.sagashop.domain.User;
 import rs.saga.obuka.sagashop.dto.paypal.CreatePayPalAccountCmd;
 import rs.saga.obuka.sagashop.dto.paypal.PayPalAccountInfo;
 import rs.saga.obuka.sagashop.dto.paypal.PayPalAccountResult;
@@ -27,11 +29,18 @@ public class PayPalAccountServiceImpl implements PayPalAccountService {
     private final static Logger LOGGER = LoggerFactory.getLogger(PayPalAccountServiceImpl.class);
 
     private final PayPalAccountDAO payPalAccountDAO;
+    private final UserDAO userDAO;
 
 
     @Override
     public PayPalAccount save(CreatePayPalAccountCmd cmd) throws ServiceException {
+        User user = userDAO.findOne(cmd.getUserId());
+        if (user == null) {
+            throw new ServiceException(ErrorCode.ERR_GEN_002, "User not found!");
+        }
         PayPalAccount payPalAccount = PayPalAccountMapper.INSTANCE.createPayPalAccountCmdToPayPalAccount(cmd);
+        payPalAccount.setUser(user);
+
         try {
             payPalAccount = payPalAccountDAO.save(payPalAccount);
         } catch (Exception e) {

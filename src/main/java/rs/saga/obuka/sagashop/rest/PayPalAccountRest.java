@@ -22,7 +22,6 @@ public class PayPalAccountRest {
     private final PayPalAccountService payPalAccountService;
 
 
-    //TODO: jel ovde fali da se izabere korisnik ?
     @PostMapping("/save")
     public PayPalAccount save(@RequestBody @Valid CreatePayPalAccountCmd cmd) throws ServiceException {
         return payPalAccountService.save(cmd);
