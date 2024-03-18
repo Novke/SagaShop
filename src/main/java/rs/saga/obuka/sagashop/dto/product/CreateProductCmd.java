@@ -18,4 +18,11 @@ public class CreateProductCmd {
     private Integer quantity;
     private String description;
     private List<CategoryProduct> categoryProducts;
+
+    public CreateProductCmd(String name, BigDecimal price, String description, Integer quantity) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.quantity = quantity;
+    }
 }

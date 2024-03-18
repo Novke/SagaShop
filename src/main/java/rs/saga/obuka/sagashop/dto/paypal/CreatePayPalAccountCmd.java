@@ -21,4 +21,12 @@ public class CreatePayPalAccountCmd {
     private String postalCode;
     private String street;
     private Long userId;
+
+    public CreatePayPalAccountCmd(String accountNumber, BigDecimal budget, Long userId, LocalDate expiresOn, String language) {
+        this.accountNumber = accountNumber;
+        this.budget = budget;
+        this.userId = userId;
+        this.expiresOn = expiresOn;
+        this.language = language;
+    }
 }

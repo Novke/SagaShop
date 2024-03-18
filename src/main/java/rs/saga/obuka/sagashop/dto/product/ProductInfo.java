@@ -13,9 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductInfo {
 
+    private Long id;
     private String name;
     private BigDecimal price;
     private String description;
+    private Integer quantity;
     private List<CategoryProduct> categoryProducts;
 
 }

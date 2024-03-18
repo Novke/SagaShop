@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductResult {
 
+    private Long id;
     private String name;
     private BigDecimal price;
     private List<CategoryProduct> categoryProducts;

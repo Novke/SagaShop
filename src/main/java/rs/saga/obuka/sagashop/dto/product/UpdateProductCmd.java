@@ -19,4 +19,12 @@ public class UpdateProductCmd {
     private Integer quantity;
     private String description;
     private List<CategoryProduct> categoryProducts;
+
+    public UpdateProductCmd(Long id, String name, BigDecimal price, String description, Integer quantity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.quantity = quantity;
+    }
 }

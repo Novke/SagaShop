@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PayPalAccountInfo {
 
+    private Long id;
     private String accountNumber;
     private BigDecimal budget;
     private String language;

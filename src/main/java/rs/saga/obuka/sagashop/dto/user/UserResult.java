@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserResult {
 
+    private Long id;
     private String username;
     private String name;
     private String surname;

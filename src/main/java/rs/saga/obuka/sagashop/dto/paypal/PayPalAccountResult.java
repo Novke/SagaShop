@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PayPalAccountResult {
 
+    private Long id;
     private String accountNumber;
     private BigDecimal budget;
     private LocalDate expiresOn;
