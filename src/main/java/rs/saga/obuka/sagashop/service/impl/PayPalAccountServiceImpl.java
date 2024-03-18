@@ -81,6 +81,7 @@ public class PayPalAccountServiceImpl implements PayPalAccountService {
         PayPalAccount payPalAccount = payPalAccountDAO.findOne(id);
         if (payPalAccount != null) {
             try {
+                payPalAccount.getUser().removePayPalAccount();
                 payPalAccountDAO.delete(payPalAccount);
             } catch (Exception e) {
                 LOGGER.error(null, e);
