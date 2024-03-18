@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.saga.obuka.sagashop.dao.UserDAO;
+import rs.saga.obuka.sagashop.domain.PayPalAccount;
 import rs.saga.obuka.sagashop.domain.User;
 import rs.saga.obuka.sagashop.dto.user.CreateUserCmd;
 import rs.saga.obuka.sagashop.dto.user.UpdateUserCmd;
@@ -79,5 +80,12 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new ServiceException(ErrorCode.ERR_GEN_002, "User not found!");
         }
+    }
+
+    @Override
+    public User linkPayPalAccount(Long id, PayPalAccount pp) throws DAOException {
+        User user = userDAO.findOne(id);
+        user.setPayPalAccount(pp);
+        return userDAO.merge(user);
     }
 }
