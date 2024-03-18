@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Entity
 @Data
@@ -35,10 +34,22 @@ public class User extends BaseEntity<Long>{
     @NotNull
     private String surname;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<PayPalAccount> payPalAccounts;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private PayPalAccount payPalAccount;
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private List<ShoppingCart> shoppingCarts;
+
+    public void setPayPalAccount(PayPalAccount payPalAccount) {
+        this.payPalAccount = payPalAccount;
+        payPalAccount.setUser(this);
+    }
+
+    public void removePayPalAccount() {
+        if (this.payPalAccount != null) {
+            this.payPalAccount.setUser(null);
+            this.payPalAccount = null;
+        }
+    }
 
 }
