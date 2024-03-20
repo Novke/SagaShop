@@ -1,5 +1,6 @@
 package rs.saga.obuka.sagashop.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,6 @@ public class ProductResult {
     private Long id;
     private String name;
     private BigDecimal price;
+    @JsonIgnore
     private List<CategoryProduct> categoryProducts;
 }

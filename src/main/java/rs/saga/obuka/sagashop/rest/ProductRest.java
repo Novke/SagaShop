@@ -49,4 +49,12 @@ public class ProductRest {
         productService.delete(id);
     }
 
+    @GetMapping("/find")
+    public List<ProductResult> find(@RequestParam(required = false) String name,
+                                    @RequestParam(required = false) Integer quantity,
+                                    @RequestParam(required = false) Double price,
+                                    @RequestParam(required = false) String category) {
+        return productService.findProducts(name, quantity, price, category);
+    }
+
 }

@@ -83,4 +83,9 @@ public class ProductServiceImpl implements ProductService {
             throw new ServiceException(ErrorCode.ERR_CAT_001, "Product not found!");
         }
     }
+
+    @Override
+    public List<ProductResult> findProducts(String name, Integer quantity, Double price, String category) {
+        return productDAO.findByCriteria(name, quantity, price, category);
+    }
 }

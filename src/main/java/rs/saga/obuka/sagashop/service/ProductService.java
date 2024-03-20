@@ -20,4 +20,6 @@ public interface ProductService {
     void update(UpdateProductCmd productDTO) throws ServiceException;
 
     void delete(Long id) throws ServiceException;
+
+    List<ProductResult> findProducts(String name, Integer quantity, Double price, String category);
 }
