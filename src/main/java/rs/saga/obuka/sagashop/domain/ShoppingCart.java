@@ -1,32 +1,36 @@
 package rs.saga.obuka.sagashop.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
 @Builder
-@NoArgsConstructor
-//@AllArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class ShoppingCart extends BaseEntity<Long>{
 
-//    @Column(nullable = false)
-//    @NotNull
-//    private String name;
+    @Column(nullable = false)
+    @NotNull
+    private String name;
 
-    //sta je status ?? enum ?
+    @NotNull
+    private Status status = Status.INACTIVE;
 
-    //price bigdecimal
+    @NotNull
+    private BigDecimal price;
 
-    //userid long FK ? ili je dovoljno sto ga cuva u kao entitet
+    @NotNull
+    @ManyToOne(optional = false)
+    private User user;
 
-    //User
-    //List<Item> items;
+    @NotNull
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
+    private List<Item> items;
+
 
 }
