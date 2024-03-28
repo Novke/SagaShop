@@ -1,6 +1,7 @@
 package rs.saga.obuka.sagashop.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import rs.saga.obuka.sagashop.domain.Product;
@@ -16,6 +17,7 @@ public interface ProductMapper {
 
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
+    @Mapping(target = "id", ignore = true)
     Product createProductCmdToProduct(CreateProductCmd cmd);
 
     List<ProductResult> listProductToListProductResult(List<Product> products);
