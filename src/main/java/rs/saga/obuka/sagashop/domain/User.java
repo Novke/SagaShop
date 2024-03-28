@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Data
@@ -34,8 +35,8 @@ public class User extends BaseEntity<Long>{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private PayPalAccount payPalAccount;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<ShoppingCart> shoppingCarts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ShoppingCart> shoppingCarts;
 
     public void setPayPalAccount(PayPalAccount payPalAccount) {
         this.payPalAccount = payPalAccount;
