@@ -3,7 +3,7 @@ package rs.saga.obuka.sagashop.dto.product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import rs.saga.obuka.sagashop.domain.CategoryProduct;
+import rs.saga.obuka.sagashop.domain.Category;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,7 +18,7 @@ public class UpdateProductCmd {
     private BigDecimal price;
     private Integer quantity;
     private String description;
-    private List<CategoryProduct> categoryProducts;
+    private List<Category> categories;
 
     public UpdateProductCmd(Long id, String name, BigDecimal price, String description, Integer quantity) {
         this.id = id;

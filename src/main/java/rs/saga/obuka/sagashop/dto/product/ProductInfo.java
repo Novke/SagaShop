@@ -3,7 +3,7 @@ package rs.saga.obuka.sagashop.dto.product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import rs.saga.obuka.sagashop.domain.CategoryProduct;
+import rs.saga.obuka.sagashop.domain.Category;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,6 +18,6 @@ public class ProductInfo {
     private BigDecimal price;
     private String description;
     private Integer quantity;
-    private List<CategoryProduct> categoryProducts;
+    private List<Category> categories;
 
 }
