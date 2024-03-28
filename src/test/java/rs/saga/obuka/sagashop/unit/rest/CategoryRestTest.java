@@ -1,4 +1,4 @@
-package rs.saga.obuka.sagashop.unit;
+package rs.saga.obuka.sagashop.unit.rest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
