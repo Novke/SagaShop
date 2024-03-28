@@ -15,7 +15,13 @@ public enum ErrorCode {
 
     // category 4201 - 4300
     ERR_CAT_001(4201, "error.categoryDoesNotExist"),
-    ERR_CAT_002(4202, "error.categoryNameExists");
+    ERR_CAT_002(4202, "error.categoryNameExists"),
+
+    // cart 4301 - 4400
+     ERR_CART_001(4301, "error.cartDoesNotExist"),
+     ERR_CART_002(4302, "error.cartIllegalState"),
+     ERR_CART_003(4303, "error.itemQuantityInvalid");
+    // ERR_CART_004(4304, "error.productDoesNotExist"),
 
 
 
