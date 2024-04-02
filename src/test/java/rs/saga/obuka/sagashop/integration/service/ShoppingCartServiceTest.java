@@ -1,7 +1,7 @@
 package rs.saga.obuka.sagashop.integration.service;
 
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import rs.saga.obuka.sagashop.AbstractIntegrationTest;
 import rs.saga.obuka.sagashop.dao.UserDAO;
@@ -11,8 +11,10 @@ import rs.saga.obuka.sagashop.domain.User;
 import rs.saga.obuka.sagashop.exception.DAOException;
 import rs.saga.obuka.sagashop.exception.ServiceException;
 import rs.saga.obuka.sagashop.service.ShoppingCartService;
+import rs.saga.obuka.sagashop.util.TransactionHandler;
 
 import static org.junit.Assert.*;
+import static rs.saga.obuka.sagashop.builder.UserBuilder.genericUser;
 
 public class ShoppingCartServiceTest extends AbstractIntegrationTest {
 
@@ -20,25 +22,33 @@ public class ShoppingCartServiceTest extends AbstractIntegrationTest {
     private ShoppingCartService shoppingCartService;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private TransactionHandler transactionHandler;
 
     @AfterEach
     public void cleanUp() {
         userDAO.findAll().forEach(user -> {
-            try {
-                userDAO.delete(user);
-            } catch (DAOException e) {
-                e.printStackTrace();
-            }
+                transactionHandler.runInTransaction(() -> {
+                    try {
+                        userDAO.delete(user);
+                        return null;
+                    } catch (DAOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
         });
     }
 
     @Test
     public void testInitializeCart() throws DAOException, ServiceException {
-        //TODO pada? userDAO je null?!
-        User user = new User("user",
-                "pass",
-                "name","lastname",null,null);
-        user = userDAO.save(user);
+        User user = transactionHandler.runInTransaction(() -> {
+            try {
+                return userDAO.save(genericUser());
+            } catch (DAOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         assertNotNull(user);
         assertNotNull(user.getId());
@@ -57,9 +67,5 @@ public class ShoppingCartServiceTest extends AbstractIntegrationTest {
         assertThrows(ServiceException.class, () -> shoppingCartService.initializeShoppingCart(id));
     }
 
-    @Test
-    public void testAddItem(){
-        assertThrows(ServiceException.class, () -> shoppingCartService.initializeShoppingCart(1L));
-    }
 
 }

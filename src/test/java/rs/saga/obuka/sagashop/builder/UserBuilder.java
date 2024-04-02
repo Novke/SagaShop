@@ -12,4 +12,10 @@ public class UserBuilder {
                 .surname("Dedović")
                 .build();
     }
+
+    public static User genericUser(){
+        return new User("user",
+                "pass",
+                "name","lastname",null,null);
+    }
 }

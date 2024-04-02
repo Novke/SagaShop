@@ -8,14 +8,18 @@ import rs.saga.obuka.sagashop.dao.ProductDAO;
 import rs.saga.obuka.sagashop.dao.ShoppingCartDAO;
 import rs.saga.obuka.sagashop.dao.UserDAO;
 import rs.saga.obuka.sagashop.domain.*;
+import rs.saga.obuka.sagashop.exception.BudgetExceededException;
 import rs.saga.obuka.sagashop.exception.DAOException;
 import rs.saga.obuka.sagashop.exception.ServiceException;
 import rs.saga.obuka.sagashop.service.ShoppingCartService;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.*;
 import static rs.saga.obuka.sagashop.builder.ProductBuilder.product;
 import static rs.saga.obuka.sagashop.builder.UserBuilder.userAna;
 
@@ -164,6 +168,61 @@ public class ShoppingCartServiceTest extends AbstractUnitServiceTest {
         when(shoppingCartDAO.save(cart)).thenReturn(cart);
 
         assertThrows(ServiceException.class, () -> shoppingCartService.removeItem(cart.getId(), 0L));
+    }
+
+    @Test
+    public void testCheckout() throws DAOException, ServiceException, BudgetExceededException {
+        User user = userAna();
+        PayPalAccount acc = new PayPalAccount();
+        acc.setBudget(new BigDecimal(1000000));
+        user.setPayPalAccount(acc);
+        user.setId(5L);
+        ShoppingCart cart = new ShoppingCart("New cart" , Status.NEW, new BigDecimal(0), user, null);
+        cart.setId(4L);
+        cart.addItem(new Item(1, product(),cart));
+        cart.setStatus(Status.ACTIVE);
+
+        when(shoppingCartDAO.findOne(cart.getId())).thenReturn(cart);
+        when(shoppingCartDAO.save(cart)).thenReturn(cart);
+
+        assertDoesNotThrow(() -> shoppingCartService.checkout(cart.getId()));
+
+        verify(shoppingCartDAO, times(1)).save(cart);
+        assertEquals(Status.COMPLETED, cart.getStatus());
+    }
+
+    @Test
+    public void testCeckoutFailCartNull(){
+
+        ShoppingCart cart = new ShoppingCart("New cart" , Status.NEW, new BigDecimal(0), userAna(), null);
+        cart.setId(4L);
+
+        when(shoppingCartDAO.findOne(cart.getId())).thenReturn(null);
+
+        assertThrows(ServiceException.class, () -> shoppingCartService.checkout(cart.getId()));
+    }
+
+    @Test
+    public void testcheckoutFailCartInactive(){
+
+        ShoppingCart cart = new ShoppingCart("New cart" , Status.INACTIVE, new BigDecimal(0), userAna(), Collections.emptyList());
+        cart.setId(4L);
+
+        when(shoppingCartDAO.findOne(cart.getId())).thenReturn(cart);
+
+        assertThrows(ServiceException.class, () -> shoppingCartService.checkout(cart.getId()));
+    }
+
+    @Test
+    public void testCheckoutFailProductQuantity(){
+        ShoppingCart cart = new ShoppingCart("New cart" , Status.ACTIVE, new BigDecimal(0), userAna(), List.of(new Item(product().getQuantity()+1, product(), null)));
+        cart.setId(4L);
+
+//        cart.addItem();
+
+        when(shoppingCartDAO.findOne(cart.getId())).thenReturn(cart);
+
+        assertThrows(ServiceException.class, () -> shoppingCartService.checkout(cart.getId()));
     }
 
 }
