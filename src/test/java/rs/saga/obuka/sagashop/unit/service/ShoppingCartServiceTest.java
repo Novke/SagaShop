@@ -1,5 +1,6 @@
 package rs.saga.obuka.sagashop.unit.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -45,9 +46,10 @@ public class ShoppingCartServiceTest extends AbstractUnitServiceTest {
         ShoppingCart cart = new ShoppingCart("New cart" , Status.NEW, new BigDecimal(0), user, null);
         cart.setId(4L);
 
-        when(productDAO.findOne(product().getId())).thenReturn(product);
+        when(productDAO.findOne(product.getId())).thenReturn(product);
         when(shoppingCartDAO.findOne(cart.getId())).thenReturn(cart);
-        //TODO ne valja, productDAO vraca null
+        when(shoppingCartDAO.save(cart)).thenReturn(cart);
+
         ShoppingCart result = shoppingCartService.addItem(cart.getId(), product.getId(), 1);
 
         assertNotNull(result);
@@ -218,11 +220,32 @@ public class ShoppingCartServiceTest extends AbstractUnitServiceTest {
         ShoppingCart cart = new ShoppingCart("New cart" , Status.ACTIVE, new BigDecimal(0), userAna(), List.of(new Item(product().getQuantity()+1, product(), null)));
         cart.setId(4L);
 
-//        cart.addItem();
-
         when(shoppingCartDAO.findOne(cart.getId())).thenReturn(cart);
 
         assertThrows(ServiceException.class, () -> shoppingCartService.checkout(cart.getId()));
+    }
+
+    @Test
+    public void testCloseShoppingCart() throws DAOException, ServiceException {
+        ShoppingCart cart = new ShoppingCart("New cart" , Status.ACTIVE, new BigDecimal(0), userAna(), Collections.emptyList());
+        cart.setId(4L);
+
+        when(shoppingCartDAO.findOne(cart.getId())).thenReturn(cart);
+        shoppingCartService.closeShoppingCart(cart.getId());
+
+        Assertions.assertEquals(Status.INACTIVE, cart.getStatus());
+    }
+
+    @Test
+    public void testCloseShoppingCardNotFound(){
+        ShoppingCart cart = new ShoppingCart("New cart" , Status.INACTIVE, new BigDecimal(0), userAna(), Collections.emptyList());
+        cart.setId(4L);
+
+        when(shoppingCartDAO.findOne(cart.getId())).thenReturn(null);
+
+        Assertions.assertThrows(ServiceException.class,() ->
+                shoppingCartService.closeShoppingCart(cart.getId()));
+
     }
 
 }

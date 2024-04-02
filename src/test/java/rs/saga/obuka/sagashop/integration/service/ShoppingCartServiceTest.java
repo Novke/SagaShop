@@ -25,18 +25,16 @@ public class ShoppingCartServiceTest extends AbstractIntegrationTest {
     @Autowired
     private TransactionHandler transactionHandler;
 
+
     @AfterEach
     public void cleanUp() {
-        userDAO.findAll().forEach(user -> {
-                transactionHandler.runInTransaction(() -> {
-                    try {
-                        userDAO.delete(user);
-                        return null;
-                    } catch (DAOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-
+        transactionHandler.runInTransaction(() -> {
+            try {
+                userDAO.deleteAll(userDAO.findAll());
+            } catch (DAOException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
         });
     }
 

@@ -80,7 +80,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void checkout(Long cartId) throws ServiceException, DAOException, BudgetExceededException {
 
             // VALIDACIJA
-
             ShoppingCart cart = shoppingCartDAO.findOne(cartId);
             if (cart == null) throw new ServiceException(ErrorCode.ERR_CART_001);
 
@@ -125,8 +124,5 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cart.setStatus(Status.INACTIVE);
         //TODO jel ima validacija ako je u nekom stanju da onda ne sme ?
     }
-
-    //TODO uradjene su metode, napisati testove
-
 
 }
