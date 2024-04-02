@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,11 @@ public class ShoppingCart extends BaseEntity<Long>{
     @NotNull
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
     private List<Item> items;
+
+    public void addItem(Item item){
+        if (items == null) items = new ArrayList<>();
+        items.add(item);
+    }
 
 
 }
