@@ -39,7 +39,7 @@ public class CategoryRestTest extends AbstractUnitRestTest {
 
     @Test
     public void saveCategory() throws Exception {
-        CreateCategoryCmd cmd = new CreateCategoryCmd("Tehnika", "TV, USB");
+        CreateCategoryCmd cmd = new CreateCategoryCmd("Tehnika", "TV, USB", null);
         String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cmd);
         Category category = CategoryBuilder.categoryBelaTehnika();
 

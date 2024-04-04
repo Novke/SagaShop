@@ -28,6 +28,6 @@ public class Category extends BaseEntity<Long> {
     @Column
     private String description;
     @JsonIgnore
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.PERSIST)
     private List<Product> products;
 }
