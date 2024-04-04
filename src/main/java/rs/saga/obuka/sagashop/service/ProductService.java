@@ -22,4 +22,6 @@ public interface ProductService {
     void delete(Long id) throws ServiceException;
 
     List<ProductResult> findProducts(String name, Integer quantity, Double price, String category);
+
+    Product saveWithCategories(CreateProductCmd cmd, List<Long> categoryIds) throws ServiceException;
 }

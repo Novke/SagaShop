@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rs.saga.obuka.sagashop.dao.CategoryDAO;
 import rs.saga.obuka.sagashop.dao.ProductDAO;
+import rs.saga.obuka.sagashop.domain.Category;
 import rs.saga.obuka.sagashop.domain.Product;
 import rs.saga.obuka.sagashop.dto.product.CreateProductCmd;
 import rs.saga.obuka.sagashop.dto.product.ProductInfo;
@@ -27,10 +29,29 @@ public class ProductServiceImpl implements ProductService {
     private final static Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final ProductDAO productDAO;
+    private final CategoryDAO categoryDAO;
 
     @Override
     public Product save(CreateProductCmd cmd) throws ServiceException {
         Product product = ProductMapper.INSTANCE.createProductCmdToProduct(cmd);
+        try {
+            product = productDAO.save(product);
+        } catch (DAOException e) {
+            LOGGER.error(null, e);
+            throw new ServiceException(ErrorCode.ERR_GEN_001, "Saving of product failed!", e);
+        }
+
+        return product;
+    }
+
+
+    @Override
+    public Product saveWithCategories(CreateProductCmd cmd, List<Long> categoryIds) throws ServiceException {
+        Product product = ProductMapper.INSTANCE.createProductCmdToProduct(cmd);
+        for (Long id : categoryIds){
+            Category category = categoryDAO.findOne(id);
+            if (category!=null) product.addCategory(category);
+        }
         try {
             product = productDAO.save(product);
         } catch (DAOException e) {
@@ -88,4 +109,5 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductResult> findProducts(String name, Integer quantity, Double price, String category) {
         return productDAO.findByCriteria(name, quantity, price, category);
     }
+
 }

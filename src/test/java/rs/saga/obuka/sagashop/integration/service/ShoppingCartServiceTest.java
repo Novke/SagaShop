@@ -65,5 +65,21 @@ public class ShoppingCartServiceTest extends AbstractIntegrationTest {
         assertThrows(ServiceException.class, () -> shoppingCartService.initializeShoppingCart(id));
     }
 
+    @Test
+    public void testCheckoutBudgetExceeded(){
+        User user = transactionHandler.runInTransaction(() -> {
+            try {
+                return userDAO.save(genericUser());
+            } catch (DAOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        assertNotNull(user);
+        assertNotNull(user.getId());
+
+
+    }
+
 
 }

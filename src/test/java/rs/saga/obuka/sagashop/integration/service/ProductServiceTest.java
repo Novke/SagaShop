@@ -32,7 +32,7 @@ public class ProductServiceTest extends AbstractIntegrationTest {
     }
     @Test
     public void saveProduct() throws ServiceException {
-        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal(6000),"description", 5);
+        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal(6000),5,"description", null);
         Product product = productService.save(cmd);
 
         assertNotNull(product);
@@ -45,10 +45,10 @@ public class ProductServiceTest extends AbstractIntegrationTest {
 
     @Test
     public void updateProduct() throws ServiceException {
-        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal(6000),"description", 15);
+        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal(6000), 15,"description", null);
         Product product = productService.save(cmd);
 
-        UpdateProductCmd updateCmd = new UpdateProductCmd(product.getId(), "product", new BigDecimal("6000.00"),"description", 10);
+        UpdateProductCmd updateCmd = new UpdateProductCmd(product.getId(), "product", new BigDecimal("6000.00"),10, "description", null);
         productService.update(updateCmd);
 
         ProductInfo updatedProduct = productService.findById(product.getId());
@@ -64,7 +64,7 @@ public class ProductServiceTest extends AbstractIntegrationTest {
 
     @Test
     public void deleteProduct() throws ServiceException {
-        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal(6000),"description", 25);
+        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal(6000), 25,"description", null);
         Product product = productService.save(cmd);
 
         productService.delete(product.getId());
@@ -76,7 +76,7 @@ public class ProductServiceTest extends AbstractIntegrationTest {
 
     @Test
     public void findOne() throws ServiceException {
-        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal("6000.00"),"description", 20);
+        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal("6000.00"), 20,"description", null);
         Product product = productService.save(cmd);
 
         ProductInfo foundProduct = productService.findById(product.getId());
@@ -89,10 +89,10 @@ public class ProductServiceTest extends AbstractIntegrationTest {
 
     @Test
     public void findAll() throws ServiceException {
-        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal(6000),"description", 50);
+        CreateProductCmd cmd = new CreateProductCmd("product", new BigDecimal(6000), 50, "description", null);
         productService.save(cmd);
 
-        CreateProductCmd cmd2 = new CreateProductCmd("product2", new BigDecimal(6000),"description", 40);
+        CreateProductCmd cmd2 = new CreateProductCmd("product2", new BigDecimal(6000), 40,"description", null);
         productService.save(cmd2);
 
         assertEquals(2, productService.findAll().size());
