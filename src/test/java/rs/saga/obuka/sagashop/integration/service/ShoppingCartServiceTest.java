@@ -4,16 +4,20 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import rs.saga.obuka.sagashop.AbstractIntegrationTest;
+import rs.saga.obuka.sagashop.dao.ProductDAO;
 import rs.saga.obuka.sagashop.dao.UserDAO;
-import rs.saga.obuka.sagashop.domain.ShoppingCart;
-import rs.saga.obuka.sagashop.domain.Status;
-import rs.saga.obuka.sagashop.domain.User;
+import rs.saga.obuka.sagashop.domain.*;
+import rs.saga.obuka.sagashop.exception.BudgetExceededException;
 import rs.saga.obuka.sagashop.exception.DAOException;
 import rs.saga.obuka.sagashop.exception.ServiceException;
 import rs.saga.obuka.sagashop.service.ShoppingCartService;
 import rs.saga.obuka.sagashop.util.TransactionHandler;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.*;
+import static rs.saga.obuka.sagashop.builder.PayPalAccBuilder.simplePayPal;
+import static rs.saga.obuka.sagashop.builder.ProductBuilder.product;
 import static rs.saga.obuka.sagashop.builder.UserBuilder.genericUser;
 
 public class ShoppingCartServiceTest extends AbstractIntegrationTest {
@@ -22,6 +26,8 @@ public class ShoppingCartServiceTest extends AbstractIntegrationTest {
     private ShoppingCartService shoppingCartService;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private ProductDAO productDAO;
     @Autowired
     private TransactionHandler transactionHandler;
 
@@ -66,19 +72,36 @@ public class ShoppingCartServiceTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testCheckoutBudgetExceeded(){
+    public void testCheckoutBudgetExceeded() throws DAOException, ServiceException {
         User user = transactionHandler.runInTransaction(() -> {
             try {
-                return userDAO.save(genericUser());
+                User u = genericUser();
+                u.setPayPalAccount(simplePayPal()); //BUDZET 10 000
+
+                return userDAO.save(u);
             } catch (DAOException e) {
                 throw new RuntimeException(e);
             }
         });
 
+        Product product = transactionHandler.runInTransaction(() -> {
+           try {
+               Product p = product();
+               p.setPrice(new BigDecimal(5000));
+               p.setQuantity(25);
+               return productDAO.save(p);
+           } catch (DAOException e){
+               throw new RuntimeException(e);
+           }
+        });
+
         assertNotNull(user);
         assertNotNull(user.getId());
 
+        ShoppingCart cart = shoppingCartService.initializeShoppingCart(user.getId());
+        shoppingCartService.addItem(cart.getId(), product.getId(), 3);
 
+        assertThrows(BudgetExceededException.class, () -> shoppingCartService.checkout(cart.getId()));
     }
 
 

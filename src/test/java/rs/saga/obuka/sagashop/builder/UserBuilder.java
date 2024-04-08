@@ -18,4 +18,5 @@ public class UserBuilder {
                 "pass",
                 "name","lastname",null,null);
     }
+
 }
