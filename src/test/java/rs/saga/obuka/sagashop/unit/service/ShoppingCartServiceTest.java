@@ -248,4 +248,12 @@ public class ShoppingCartServiceTest extends AbstractUnitServiceTest {
 
     }
 
+//    @Test
+//    public void testBudgetExceededException(){
+//        ShoppingCart cart = new ShoppingCart("New cart" , Status.NEW, new BigDecimal(0), userAna(), null);
+//        Item item = new Item(5, product(), cart);
+//        cart.setItems(List.of(item));
+//        when(shoppingCartDAO.findOne(cart.getId())).thenReturn(cart);
+//    }
+
 }
