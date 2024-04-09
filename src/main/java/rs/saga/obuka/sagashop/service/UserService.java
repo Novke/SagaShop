@@ -1,6 +1,7 @@
 package rs.saga.obuka.sagashop.service;
 
 import rs.saga.obuka.sagashop.domain.PayPalAccount;
+import rs.saga.obuka.sagashop.domain.RoleName;
 import rs.saga.obuka.sagashop.domain.User;
 import rs.saga.obuka.sagashop.dto.user.CreateUserCmd;
 import rs.saga.obuka.sagashop.dto.user.UpdateUserCmd;
@@ -24,4 +25,6 @@ public interface UserService {
     void delete(Long id) throws ServiceException;
 
     User linkPayPalAccount(Long id, PayPalAccount pp) throws DAOException;
+
+    User addRole(Long userId, RoleName role) throws DAOException, ServiceException;
 }

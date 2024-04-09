@@ -26,6 +26,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 public class UserServiceTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -157,6 +160,20 @@ public class UserServiceTest extends AbstractIntegrationTest {
         PayPalAccountInfo payPalAccountInfo = payPalAccountService.findById(createdUser.getPayPalAccount().getId());
         Assertions.assertNotNull(payPalAccountInfo);
         Assertions.assertEquals("1337", payPalAccountInfo.getAccountNumber());
+    }
+
+    @Test
+    public void addRole() throws ServiceException, DAOException {
+        CreateUserCmd cmd = new CreateUserCmd("user", "pass", "name", "lastname");
+
+        User createdUser = userService.save(cmd);
+
+        assertNotNull(createdUser);
+        assertNotNull(createdUser.getId());
+
+        User editedUser = userService.addRole(createdUser.getId(), RoleName.ADMIN);
+
+        assertEquals(2, editedUser.getRoles().size());
     }
 
 }

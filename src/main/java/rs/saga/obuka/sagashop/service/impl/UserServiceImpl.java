@@ -22,6 +22,7 @@ import rs.saga.obuka.sagashop.mapper.UserMapper;
 import rs.saga.obuka.sagashop.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -94,6 +95,18 @@ public class UserServiceImpl implements UserService {
     public User linkPayPalAccount(Long id, PayPalAccount pp) throws DAOException {
         User user = userDAO.findOne(id);
         user.setPayPalAccount(pp);
+        return userDAO.merge(user);
+    }
+
+    @Override
+    public User addRole(Long userId, RoleName roleName) throws DAOException, ServiceException {
+        User user = userDAO.findOne(userId);
+        Optional<Role> optionalRole = roleDAO.findAll().stream().filter(r -> r.getName().equals(RoleName.USER)).findFirst();
+        if (optionalRole.isEmpty()) throw new ServiceException(ErrorCode.ERR_GEN_002);
+        Role role = optionalRole.get();
+
+        user.getRoles().add(role);
+
         return userDAO.merge(user);
     }
 }
