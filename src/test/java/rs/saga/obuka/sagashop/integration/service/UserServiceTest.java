@@ -2,11 +2,15 @@ package rs.saga.obuka.sagashop.integration.service;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import rs.saga.obuka.sagashop.AbstractIntegrationTest;
+import rs.saga.obuka.sagashop.dao.RoleDAO;
 import rs.saga.obuka.sagashop.dao.UserDAO;
 import rs.saga.obuka.sagashop.domain.PayPalAccount;
+import rs.saga.obuka.sagashop.domain.Role;
+import rs.saga.obuka.sagashop.domain.RoleName;
 import rs.saga.obuka.sagashop.domain.User;
 import rs.saga.obuka.sagashop.dto.paypal.PayPalAccountInfo;
 import rs.saga.obuka.sagashop.dto.user.CreateUserCmd;
@@ -29,8 +33,22 @@ public class UserServiceTest extends AbstractIntegrationTest {
     @Autowired
     private UserDAO userDAO;
     @Autowired
+    private RoleDAO roleDAO;
+    @Autowired
     private PayPalAccountService payPalAccountService;
 
+    @BeforeEach
+    public void setUp(){
+        transactionHandler.runInTransaction(()->{
+            try {
+                roleDAO.save(new Role(RoleName.USER));
+                roleDAO.save(new Role(RoleName.ADMIN));
+                return null;
+            } catch (DAOException ex){
+                throw new RuntimeException(ex);
+            }
+        });
+    }
     @AfterEach
     public void tearDown(){
         userService.findAll().forEach(e -> {
@@ -38,6 +56,14 @@ public class UserServiceTest extends AbstractIntegrationTest {
                 userService.delete(e.getId());
             } catch (ServiceException serviceException) {
                 serviceException.printStackTrace();
+            }
+        });
+        transactionHandler.runInTransaction(()->{
+            try {
+                roleDAO.deleteAll();
+                return null;
+            } catch (DAOException ex){
+                throw new RuntimeException(ex);
             }
         });
     }

@@ -8,7 +8,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rs.saga.obuka.sagashop.dao.CategoryDAO;
 import rs.saga.obuka.sagashop.dao.ProductDAO;
 import rs.saga.obuka.sagashop.exception.DAOException;
-import rs.saga.obuka.sagashop.exception.ServiceException;
 import rs.saga.obuka.sagashop.service.CategoryService;
 import rs.saga.obuka.sagashop.util.TransactionHandler;
 
@@ -27,8 +26,7 @@ public abstract class AbstractIntegrationTest {
   @Autowired
   private CategoryDAO categoryDAO;
   @Autowired
-  private TransactionHandler transactionHandler;
-
+  protected TransactionHandler transactionHandler;
 
   @AfterEach
   public void tearDown(){

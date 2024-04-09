@@ -5,8 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rs.saga.obuka.sagashop.dao.RoleDAO;
 import rs.saga.obuka.sagashop.dao.UserDAO;
 import rs.saga.obuka.sagashop.domain.PayPalAccount;
+import rs.saga.obuka.sagashop.domain.Role;
+import rs.saga.obuka.sagashop.domain.RoleName;
 import rs.saga.obuka.sagashop.domain.User;
 import rs.saga.obuka.sagashop.dto.user.CreateUserCmd;
 import rs.saga.obuka.sagashop.dto.user.UpdateUserCmd;
@@ -19,6 +22,7 @@ import rs.saga.obuka.sagashop.mapper.UserMapper;
 import rs.saga.obuka.sagashop.service.UserService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,11 +31,15 @@ public class UserServiceImpl implements UserService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserDAO userDAO;
+    private final RoleDAO roleDAO;
 
 
     @Override
     public User save(CreateUserCmd cmd) throws ServiceException {
         User user = UserMapper.INSTANCE.createUserCmdToUser(cmd);
+//        user.setRoles(List.of(new Role(RoleName.USER)));
+        user.setRoles(roleDAO.findAll().stream().filter(r -> r.getName().equals(RoleName.USER)).collect(Collectors.toList()));
+
         try {
             user = userDAO.save(user);
         } catch (Exception e) {
